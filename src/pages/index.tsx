@@ -15,8 +15,8 @@ export default function Home() {
       <meta name='decription' content='Web application that contains leetcode problems and video solutions'/>
     </Head>
     <Topbar/>
-    <main className='bg-dark-layer-2 min-h-screen text-white'>
-      <h1>Hello world</h1>
+    <main className='bg-dark-layer-2 min-h-screen'>
+
     </main>
    </>
   )
