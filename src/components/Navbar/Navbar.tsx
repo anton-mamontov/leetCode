@@ -13,9 +13,9 @@ const Navbar:React.FC<NavbarProps> = () => {
         setAuthModalState((prev) => ({...prev, isOpen:true, type:'login'}))
     }
     
-    return <div className='flex items-center justify-between sm:px-12 px-2 md:px-24'>
-            <Link href="/" className='flex-item-center justify-normal h-20'>
-                <img src='/logo2.png' alt='LeetCode' className='h-full'/>
+    return <div className='h-[70px] flex items-center justify-between sm:px-12 px-2 md:px-24'>
+            <Link href="/" className='flex-item-center justify-normal'>
+                <img src='/mammoth1.jpg' alt='Mamont Lab' width='h-[50x]' className='flex items-center h-[50px]'/>
             </Link>
             <div className="flex items-center">
                 <button
