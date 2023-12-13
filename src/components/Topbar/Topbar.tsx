@@ -2,6 +2,7 @@ import { auth } from "@/firebase/firebase";
 import Link from "next/link";
 import React from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
+import Loggout from "../Buttons/Loggout";
 
 type TopbarProps = {};
 
@@ -13,7 +14,7 @@ const Topbar: React.FC<TopbarProps> = () => {
       <Link href='/' className="h-[50px] flex-1">
         <img src="/mammoth1.jpg" width='h-[50x]' alt ='Logo' className="h-full"/>
       </Link>
-      <div className="flex items-center space-x-4 flex-1 justify-end">
+      <div className="flex items-center space-x-4 flex-1 justify-end mr-20">
         <div>
           <a 
             href="https://www.buymeacoffee.com/anton.mamontov"
@@ -30,14 +31,19 @@ const Topbar: React.FC<TopbarProps> = () => {
           </Link>
           )}
         {user && (
-          <div className="cursor-pointer group relative">
-            <img src="/avatar.png" alt="user profile image" className="h-8 w-8 rounded-full"/>  
-            <div className="absolute top-10 left-2/4 -translate-x-3/4 mx-auto bg-dark-layer-1 text-brand-orange p-2 shadow-lg
-              z-40 group-hover:scale-100 scale-0
-              transition-all duration-300 ease-out
-            ">
-              <p className="text-sm">{user.email}</p>
-            </div>        
+          <div className="flex flex-row">
+            <div className="cursor-pointer group relative">
+              <img src="/avatar.png" alt="user profile image" className="h-8 w-8 rounded-full"/>  
+              <div className="absolute top-10 left-2/4 -translate-x-3/4 mx-auto bg-dark-layer-1 text-brand-orange p-2 shadow-lg
+                z-40 group-hover:scale-100 scale-0
+                transition-all duration-300 ease-out
+              ">
+                <p className="text-sm">{user.email}</p>
+              </div>        
+            </div>
+            <div className="pl-3">
+              <Loggout/>
+            </div>
           </div>
         )}
       </div>
