@@ -9,6 +9,7 @@ import Image from "next/image";
 import ProblemPage from "@/pages/problems/[pid]";
 import {FaChevronLeft, FaChevronRight} from 'react-icons/fa'
 import { BsList } from "react-icons/bs";
+import Timer from "../Timer/Timer";
 
 type TopbarProps = {
   problemPage? : boolean;
@@ -45,7 +46,7 @@ const Topbar: React.FC<TopbarProps> = ({problemPage}) => {
             </div>
         </div>
       )}
-      <div className="flex items-center space-x-4 flex-1 justify-end mr-20">
+      <div className="flex items-center space-x-4 flex-1 justify-end mr-10">
         <div>
           <a 
             href="https://www.buymeacoffee.com/anton.mamontov"
@@ -56,6 +57,7 @@ const Topbar: React.FC<TopbarProps> = ({problemPage}) => {
             Premium
           </a>
         </div>
+        {problemPage && <Timer/>}
         {!user && (
           <Link href='/auth'>
             <button className="bg-dark-fill-3 py-1 px-2 cursor-pointer rounded" onClick={onSignInClickHandler}>Sign In</button>
@@ -65,7 +67,7 @@ const Topbar: React.FC<TopbarProps> = ({problemPage}) => {
           <div className="flex flex-row gap-3">
             <div className="cursor-pointer group relative">
               <img src="/avatar.png" alt="user profile image" className="h-8 w-8 rounded-full"/>  
-              <div className="absolute top-10 left-2/4 -translate-x-2/4 mx-auto bg-dark-layer-1 text-brand-orange p-2 shadow-lg
+              <div className="absolute top-10 left-1/4 -translate-x-2/4 mx-auto bg-dark-layer-1 text-brand-orange p-2 shadow-lg
                 z-40 group-hover:scale-100 scale-0
                 transition-all duration-300 ease-out
               ">
