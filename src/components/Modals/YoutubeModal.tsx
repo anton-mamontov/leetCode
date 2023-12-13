@@ -30,7 +30,7 @@ export default YoutubeModal;
 function useCloseModal() {
     const setAuthModalState = useSetRecoilState(youtubeModalState)
     const closeModal = () => {
-        setAuthModalState((prev) => ({...prev, isOpen:false}))
+        setAuthModalState((prev) => ({...prev, isOpen:false, videoId:''}))
     }
 
     useEffect(() => {
