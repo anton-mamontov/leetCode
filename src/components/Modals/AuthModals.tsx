@@ -1,8 +1,8 @@
 import React, {useEffect} from 'react';
 import { IoClose } from "react-icons/io5";
-import Login from '@/components/Modals/Login';
-import ResetPassword from './ResetPassword';
-import Signup from './Signup';
+import Login from './Auth/Login';
+import ResetPassword from './Auth/ResetPassword';
+import Signup from './Auth/Signup';
 import {useSetRecoilState, useRecoilValue} from 'recoil'
 import { authModalState } from '@/atoms/authModalAtom';
 
