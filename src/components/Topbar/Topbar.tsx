@@ -41,7 +41,7 @@ const Topbar: React.FC<TopbarProps> = () => {
           </Link>
           )}
         {user && (
-          <div className="flex flex-row">
+          <div className="flex flex-row gap-3">
             <div className="cursor-pointer group relative">
               <img src="/avatar.png" alt="user profile image" className="h-8 w-8 rounded-full"/>  
               <div className="absolute top-10 left-2/4 -translate-x-2/4 mx-auto bg-dark-layer-1 text-brand-orange p-2 shadow-lg
@@ -51,9 +51,7 @@ const Topbar: React.FC<TopbarProps> = () => {
                 <p className="text-sm">{user.email}</p>
               </div>        
             </div>
-            <div className="pl-3">
-              <Loggout/>
-            </div>
+            <Loggout/>
           </div>
         )}
       </div>
