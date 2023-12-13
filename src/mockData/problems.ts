@@ -19,10 +19,10 @@ export const problems: Problem[] = [
 	{
 		id: "reverse-linked-list",
 		title: "Reverse Linked List",
-		difficulty: "Hard",
+		difficulty: "Easy",
 		category: "Linked List",
 		order: 2,
-		videoId: "",
+		videoId: "XgABnoJLtG4",
 	},
 	{
 		id: "jump-game",
@@ -81,10 +81,10 @@ export const problems: Problem[] = [
 		videoId: "",
 	},
 	{
-		id: "subsets",
-		title: "Subsets",
-		difficulty: "Medium",
-		category: "Backtracking",
+		id: "Word Search II",
+		title: "Word Search II",
+		difficulty: "Hard",
+		category: "Strings",
 		order: 10,
 		videoId: "",
 	},

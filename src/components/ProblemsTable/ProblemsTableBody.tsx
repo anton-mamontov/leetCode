@@ -3,15 +3,20 @@ import {BsCheckCircle} from 'react-icons/bs'
 import {AiFillYoutube} from 'react-icons/ai'
 import React from 'react';
 import Link from 'next/link';
-// import { IoClose } from 'react-icons/io5';
-// import YouTube from 'react-youtube';
+import { useSetRecoilState } from 'recoil';
+import { YoutubeModalState, youtubeModalState } from '@/atoms/youtubeModalAtom';
 
 type ProblemsTableBodyProps = {
     
 };
 
 const ProblemsTableBody:React.FC<ProblemsTableBodyProps> = () => {
-    
+    const setYoutubeModalState = useSetRecoilState(youtubeModalState);
+
+    const handleClick = (videoId: string) => {
+        setYoutubeModalState((prev) => ({...prev, isOpen:true, videoId:videoId}))
+    }
+
     return (
         <>
             <tbody className='text-white'>
@@ -33,9 +38,7 @@ const ProblemsTableBody:React.FC<ProblemsTableBodyProps> = () => {
                             <td className='px-6 py-4'>{problem.category}</td>
                             <td className='px-6 py-4'>
                                 { problem.videoId ? (
-                                <Link href={'https://www.youtube.com/watch?v=' + problem.videoId}>
-                                    <AiFillYoutube  fontSize={"25"} className='cursor-pointer hover:text-red-600'/>
-                                </Link>
+                                    <AiFillYoutube  fontSize={"25"} className='cursor-pointer hover:text-red-600' onClick={() => handleClick(problem.videoId || '')}/>
                                 ) 
                                 : <p className='text-gray-400'>Coming soon</p>}
                             </td>

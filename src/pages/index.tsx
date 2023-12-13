@@ -3,11 +3,14 @@ import { Inter } from 'next/font/google'
 import Head from 'next/head'
 import Topbar from '@/components/Topbar/Topbar'
 import ProblemsTable from '@/components/ProblemsTable/PorblemsTable'
+import YoutubeModal from '@/components/Modals/YoutubeModal'
+import { useRecoilValue } from 'recoil'
+import { youtubeModalState } from '@/atoms/youtubeModalAtom'
 
 const inter = Inter({ subsets: ['latin'] })
 
 export default function Home() {
-  
+  const youtubeModal = useRecoilValue(youtubeModalState)
   return (
    <>
    <Head>
@@ -22,6 +25,7 @@ export default function Home() {
           &ldquo;QUALITY OVER QUANTITY&rdquo; 👇
         </h1>
         <ProblemsTable/>
+        {youtubeModal.isOpen && <YoutubeModal videoId={youtubeModal.videoId}/>}
     </main>
    </>
   )
