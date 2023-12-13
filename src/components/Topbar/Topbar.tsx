@@ -5,6 +5,7 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import Loggout from "../Buttons/Loggout";
 import { useSetRecoilState } from "recoil";
 import { authModalState } from "@/atoms/authModalAtom";
+import Image from "next/image";
 
 type TopbarProps = {};
 
@@ -18,16 +19,18 @@ const Topbar: React.FC<TopbarProps> = () => {
 
   return <nav className="relative flex h-[70px] w-full shrink-0 items-center px-5 bg-dark-layer-1 text-dark-gray-7">
     <div className="flex w-full items-center justify-between max-w-[1200px] mx-auto">
-      <Link href='/' className="h-[50px] flex-1">
-        <img src="/mammoth1.jpg" width='h-[50x]' alt ='Logo' className="h-full"/>
-      </Link>
+      <div className="h-[50px] ">
+        <Link href='/' >
+          <Image src="/mammoth1.jpg" alt="Logo Image" width={500} height={500} style={{ height: '100%', width: 'auto' }} quality={100}/>
+        </Link>
+      </div>
       <div className="flex items-center space-x-4 flex-1 justify-end mr-20">
         <div>
           <a 
             href="https://www.buymeacoffee.com/anton.mamontov"
             target="_blank"
             rel='noreferrer'
-            className="bg-dark-fill-3 py-1.5 px-3 cursor-pointer rounded text-brand-orange hover:bg-dark-fill-2"
+            className="bg-dark-fill-3 pt-[5px] pb-[6px] px-3 cursor-pointer rounded text-brand-orange hover:bg-dark-fill-2"
           >
             Premium
           </a>
