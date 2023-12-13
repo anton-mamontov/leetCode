@@ -12,8 +12,8 @@ const Topbar: React.FC<TopbarProps> = () => {
   const [user] = useAuthState(auth);
   const setAuthModalState = useSetRecoilState(authModalState);
 
-  const onSignOutClickHandler = () => (
-    setAuthModalState((prev) => ({...prev, isOpen:true, typr:'login'}))
+  const onSignInClickHandler = () => (
+    setAuthModalState((prev) => ({...prev, isOpen:true, type:'login'}))
   );
 
   return <nav className="relative flex h-[70px] w-full shrink-0 items-center px-5 bg-dark-layer-1 text-dark-gray-7">
@@ -34,7 +34,7 @@ const Topbar: React.FC<TopbarProps> = () => {
         </div>
         {!user && (
           <Link href='/auth'>
-            <button className="bg-dark-fill-3 py-1 px-2 cursor-pointer rounded" onClick={onSignOutClickHandler}>Sign In</button>
+            <button className="bg-dark-fill-3 py-1 px-2 cursor-pointer rounded" onClick={onSignInClickHandler}>Sign In</button>
           </Link>
           )}
         {user && (
