@@ -6,10 +6,15 @@ import Loggout from "../Buttons/Loggout";
 import { useSetRecoilState } from "recoil";
 import { authModalState } from "@/atoms/authModalAtom";
 import Image from "next/image";
+import ProblemPage from "@/pages/problems/[pid]";
+import {FaChevronLeft, FaChevronRight} from 'react-icons/fa'
+import { BsList } from "react-icons/bs";
 
-type TopbarProps = {};
+type TopbarProps = {
+  problemPage? : boolean;
+};
 
-const Topbar: React.FC<TopbarProps> = () => {
+const Topbar: React.FC<TopbarProps> = ({problemPage}) => {
   const [user] = useAuthState(auth);
   const setAuthModalState = useSetRecoilState(authModalState);
 
@@ -21,9 +26,25 @@ const Topbar: React.FC<TopbarProps> = () => {
     <div className="flex w-full items-center justify-between max-w-[1200px] mx-auto">
       <div className="h-[50px] ">
         <Link href='/' >
-          <Image src="/mammoth1.jpg" alt="Logo Image" width={500} height={500} style={{ height: '100%', width: 'auto' }} quality={100}/>
+          <Image src="/mammoth1.jpg" alt="Logo Image" width={500} height={500} style={{ height: '100%', width: 'auto' }} quality={100} priority={true}/>
         </Link>
       </div>
+      {problemPage && (
+          <div className="flex items-center gap-4 flex-1 justify-center ml-80">
+            <div className="flex items-center justify-center rounded bg-dark-fill-3 hover:bg-dark-fill-2 h-8 w-8 cursor-pointer">
+              <FaChevronLeft/>
+            </div>
+            <Link href="/" className="flex items-center gap-2 font-medium max-w-[170px] text-dark-gray-8 cursor-pointer">
+              <div>
+                <BsList/>
+              </div>
+              <p>Problems list</p>
+            </Link>
+            <div className="flex items-center justify-center rounded bg-dark-fill-3 hover:bg-dark-fill-2 h-8 w-8 cursor-pointer">
+              <FaChevronRight/>
+            </div>
+        </div>
+      )}
       <div className="flex items-center space-x-4 flex-1 justify-end mr-20">
         <div>
           <a 
