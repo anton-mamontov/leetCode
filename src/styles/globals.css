@@ -48,3 +48,12 @@ code {
     font-size: 0.98rem;
     line-height: 1.25rem;
 }
+
+.cm-scroller,
+.cm-gutters {
+    background-color: #282828 !important;
+}
+
+.cm-focused {
+    outline: none !important;
+}
