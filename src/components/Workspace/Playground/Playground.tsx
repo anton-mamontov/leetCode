@@ -6,6 +6,7 @@ import CodeMirror from "@uiw/react-codemirror"
 import { vscodeDark } from '@uiw/codemirror-theme-vscode';
 import { javascript } from '@codemirror/lang-javascript';
 import EditorFooter from './EditorFooter';
+import { EditorView as EditorView } from "@codemirror/view";
 
 type PlaygroundProps = {
     
@@ -15,12 +16,12 @@ const Playground:React.FC<PlaygroundProps> = () => {
     
     return <div className='flex flex-col bg-dark-layer-1 relative'>
         <PreferenceNav/>
-        <Split className='h-[calc(100vh-94px)]' direction="vertical"  minSize={60}>
-            <div className='w-full overflow-auto'>
+        <Split className='h-[calc(100vh-114px)]' direction="vertical"  minSize={60}>
+            <div className='w-full '>
                 <CodeMirror
                     value='const a=1;'
                     theme={vscodeDark}
-                    extensions={[javascript()]}
+                    extensions={[javascript(),  EditorView.lineWrapping]}
                     style={{fontSize:16}}
                 />
             </div>
@@ -72,8 +73,8 @@ const Playground:React.FC<PlaygroundProps> = () => {
                         [0, 1]
                     </div>
                 </div>
+                <EditorFooter/>
             </div>
-            <EditorFooter/>
         </Split>
     </div>
 }
