@@ -1,18 +1,17 @@
-import { problems } from '@/mockData/problems';
 import {BsCheckCircle} from 'react-icons/bs'
 import {AiFillYoutube} from 'react-icons/ai'
 import React from 'react';
 import Link from 'next/link';
 import { useSetRecoilState } from 'recoil';
-import { YoutubeModalState, youtubeModalState } from '@/atoms/youtubeModalAtom';
+import { youtubeModalState } from '@/atoms/youtubeModalAtom';
+import { DbProblem } from '@/utils/types/problem';
 
 type ProblemsTableBodyProps = {
-    
+    problems: DbProblem[];
 };
 
-const ProblemsTableBody:React.FC<ProblemsTableBodyProps> = () => {
+const ProblemsTableBody:React.FC<ProblemsTableBodyProps> = ({problems}) => {
     const setYoutubeModalState = useSetRecoilState(youtubeModalState);
-
     const handleClick = (videoId: string) => {
         setYoutubeModalState((prev) => ({...prev, isOpen:true, videoId:videoId}))
     }
@@ -30,9 +29,17 @@ const ProblemsTableBody:React.FC<ProblemsTableBodyProps> = () => {
                                 <BsCheckCircle fontSize={"18"} width="18"/>
                             </th>
                             <td className='px-6 py-4'>
+                                {problem.link? (
+                                <Link className='hover:text-blue-600 cursor-pointer' target='_blank'  rel='noreferrer' href={problem.link}>
+                                    {problem.title} 
+                                </Link>
+                                ) : (
                                 <Link className='hover:text-blue-600 cursor-pointer' href={`/problems/${problem.id}`}>
                                     {problem.title} 
                                 </Link>
+                                )
+                                }
+                                
                             </td>
                             <td className={`px-6 py-4 ${difficultyColor}`}>{problem.difficulty}</td>
                             <td className='px-6 py-4'>{problem.category}</td>
