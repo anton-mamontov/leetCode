@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import PreferenceNav from './PreferenceNavBar/PreferenceNav';
 import Split from 'react-split';
@@ -7,20 +7,23 @@ import { vscodeDark } from '@uiw/codemirror-theme-vscode';
 import { javascript } from '@codemirror/lang-javascript';
 import EditorFooter from './EditorFooter';
 import { EditorView as EditorView } from "@codemirror/view";
+import { LocalProblem } from '@/utils/types/problem';
 import TestCaseInfo from './TestCaseInfo';
 
 type PlaygroundProps = {
-    
+    problem: LocalProblem
 };
 
-const Playground:React.FC<PlaygroundProps> = () => {
+const Playground:React.FC<PlaygroundProps> = ({problem}) => {
+    const [currentTestCaseId, setcurrentTestCaseId] = useState(0);
+    const currentTestCase = problem.examples[currentTestCaseId];
     
-    return <div className='flex flex-col bg-dark-layer-1 relative '>
+    return <div className='flex flex-col bg-dark-layer-1 relative overflow-x-hidden'>
         <PreferenceNav/>
         <Split className='h-[calc(100vh-114px)]' direction="vertical"  minSize={60}>
             <div className='w-full overflow-auto'>
                 <CodeMirror
-                    value='const a=1;'
+                    value={problem.starterCode}
                     theme={vscodeDark}
                     extensions={[javascript(),  EditorView.lineWrapping]}
                     style={{fontSize:16}}
@@ -34,37 +37,20 @@ const Playground:React.FC<PlaygroundProps> = () => {
                     </div>
                 </div>
                 <div className='flex'>
-                    <div className='mr-2 items-start mt-2 text-white'>
+                {problem.examples.map((example, id) => {
+                    return (
+                    <div className='mr-2 items-start mt-2 ' key={id} onClick={() => setcurrentTestCaseId(id)}>
                         <div className='flex flex-wrap items-center gap-y-4'>
-                            <div className='font-medium items-center transition-all focus:outline-none inline-flex bg-dark-fill-3
+                            <div className={`font-medium items-center transition-all focus:outline-none inline-flex
                                 hover:bg-dark-fill-2 relative rounded-lg px-4 py-1 cursor-pointer whitespace-nowrap
-                            '>
-                                Case 1
+                                ${currentTestCaseId === id ? 'bg-dark-fill-2 text-white' : ' bg-dark-fill-3 text-gray-400'}
+                            `}>
+                                Case {example.id}
                             </div>
                         </div>
                     </div>
-
-                    <div className='mr-2 items-start mt-2 text-white'>
-                        <div className='flex flex-wrap items-center gap-y-4'>
-                            <div className='font-medium items-center transition-all focus:outline-none inline-flex bg-dark-fill-3
-                                hover:bg-dark-fill-2 relative rounded-lg px-4 py-1 cursor-pointer whitespace-nowrap
-                            '>
-                                Case 2
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className='mr-2 items-start mt-2 text-white'>
-                        <div className='flex flex-wrap items-center gap-y-4'>
-                            <div className='font-medium items-center transition-all focus:outline-none inline-flex bg-dark-fill-3
-                                hover:bg-dark-fill-2 relative rounded-lg px-4 py-1 cursor-pointer whitespace-nowrap
-                            '>
-                                Case 3
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <TestCaseInfo inputText={"nums = [2,7,11,15], target = 9"} outputText={"[0, 1]"}/>
+                    )})}
+                </div>                {currentTestCase && <TestCaseInfo inputText={currentTestCase.inputText} outputText={currentTestCase.outputText}/>}
             </div>
         </Split>
         <EditorFooter/>
