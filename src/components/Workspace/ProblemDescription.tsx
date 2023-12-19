@@ -11,10 +11,11 @@ import { useAuthState } from 'react-firebase-hooks/auth';
 import { toast } from 'react-toastify';
 
 type ProblemDescriptionProps = {
-    problem: LocalProblem
+    problem: LocalProblem,
+    _solved: boolean
 };
 
-const ProblemDescription:React.FC<ProblemDescriptionProps> = ({problem}) => {
+const ProblemDescription:React.FC<ProblemDescriptionProps> = ({problem, _solved}) => {
     const {currentProblem : problemStatistics, loading, problemDifficultyClass, setCurrentProblem} = useGetCurrentProblem(problem.id);
     const {liked, disliked, solved, starred, setData} = useGetUsersDataProblem(problem.id);
     const [user] = useAuthState(auth);
@@ -178,7 +179,7 @@ const ProblemDescription:React.FC<ProblemDescriptionProps> = ({problem}) => {
                 )}
                 {!loading && problemStatistics && <div className='flex items-center mt-3'>
                     <div className={`${problemDifficultyClass} inline-block rounded-[21px] bg-opacity-[.15] px-2.5 py-1 text-xs font-medium capitalize`}>{problemStatistics?.difficulty}</div>
-                    {solved && (
+                    {(solved || _solved) && (
                         <div className='rounded p-[3x] ml-4 text-lg transition-colors duration-200 text-dark-green-s'>
                             <BsCheck2Circle/>
                         </div>

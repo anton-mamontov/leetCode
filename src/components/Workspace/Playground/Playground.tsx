@@ -9,14 +9,84 @@ import EditorFooter from './EditorFooter';
 import { EditorView as EditorView } from "@codemirror/view";
 import { LocalProblem } from '@/utils/types/problem';
 import TestCaseInfo from './TestCaseInfo';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { auth, firestore } from '@/firebase/firebase';
+import { toast } from 'react-toastify';
+import { problems } from '@/utils/problems';
+import { useRouter } from 'next/router';
+import { arrayUnion, doc, updateDoc } from 'firebase/firestore';
 
 type PlaygroundProps = {
-    problem: LocalProblem
+    problem: LocalProblem,
+    setSuccess: React.Dispatch<React.SetStateAction<boolean>>
+    setSolved: React.Dispatch<React.SetStateAction<boolean>>
 };
 
-const Playground:React.FC<PlaygroundProps> = ({problem}) => {
+const Playground:React.FC<PlaygroundProps> = ({problem, setSuccess, setSolved}) => {
     const [currentTestCaseId, setcurrentTestCaseId] = useState(0);
     const currentTestCase = problem.examples[currentTestCaseId];
+    const [userCode, setUserCode] = useState<string>(problem.starterCode);
+    const [user] = useAuthState(auth);
+    const {query : {pid}} = useRouter();
+
+    const handleSubmit = async () => {
+        if (!user) {
+            toast.error("Please login to submit you code", {
+                position:"top-center",
+                theme: 'dark',
+                autoClose: 3000
+            })
+            return;
+        }
+        try {
+            const cb = new Function(`return ${userCode}`)();
+            const success = problems[pid as string].handlerFunction(cb);
+            if (success) {
+                const userRef = doc(firestore, "users", user.uid);
+                await updateDoc(userRef, {
+                    solvedProblems: arrayUnion(pid)
+                });
+                toast.success("Congrats! All tests passed!!", {
+                    position:"top-center",
+                    theme: 'dark',
+                    autoClose: 3000
+                });
+                setSolved(true);
+                setSuccess(true);
+                setTimeout(() => {
+                    setSuccess(false);
+                }, 4000)
+            }
+        } catch (error) {
+            if (error instanceof Error) {
+                if (error.message.startsWith("AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:")) {
+                    toast.error("Ooops! One or more test casses failed", {
+                        position:"top-center",
+                        theme: 'dark',
+                        autoClose: 3000
+                    })
+                } else {
+                    toast.error(error.message, {
+                        position:"top-center",
+                        theme: 'dark',
+                        autoClose: 3000
+                    })
+                }
+            } else {
+                toast.error("Ooops, something went wrong", {
+                    position:"top-center",
+                    theme: 'dark',
+                    autoClose: 3000
+                })
+            }
+        }
+    }
+
+
+
+    const onChange = (value:string) => {
+        setUserCode(value);
+    }
     
     return <div className='flex flex-col bg-dark-layer-1 relative overflow-x-hidden'>
         <PreferenceNav/>
@@ -26,6 +96,7 @@ const Playground:React.FC<PlaygroundProps> = ({problem}) => {
                     value={problem.starterCode}
                     theme={vscodeDark}
                     extensions={[javascript(),  EditorView.lineWrapping]}
+                    onChange={onChange}
                     style={{fontSize:16}}
                 />
             </div>
@@ -50,10 +121,11 @@ const Playground:React.FC<PlaygroundProps> = ({problem}) => {
                         </div>
                     </div>
                     )})}
-                </div>                {currentTestCase && <TestCaseInfo inputText={currentTestCase.inputText} outputText={currentTestCase.outputText}/>}
+                </div>
+                {currentTestCase && <TestCaseInfo inputText={currentTestCase.inputText} outputText={currentTestCase.outputText}/>}
             </div>
         </Split>
-        <EditorFooter/>
+        <EditorFooter handleSubmit={handleSubmit}/>
     </div>
 }
 export default Playground;
