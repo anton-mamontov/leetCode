@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { AiOutlineFullscreen, AiOutlineFullscreenExit, AiOutlineSetting } from 'react-icons/ai';
+import { ISettings } from '../Playground';
+import SettingsModal from '@/components/Modals/SettingsModal';
 
 type PreferenceNavProps = {
-    
+    settings: ISettings,
+    setSettings: React.Dispatch<React.SetStateAction<ISettings>>
 };
 
-const PreferenceNav:React.FC<PreferenceNavProps> = () => {
+const PreferenceNav:React.FC<PreferenceNavProps> = ({settings, setSettings}) => {
     const [isFullScreen, setFullScreen] = useState<boolean>(false);
     const handleFullScreen = () => {
         if (isFullScreen) {
@@ -41,6 +44,10 @@ const PreferenceNav:React.FC<PreferenceNavProps> = () => {
             }
           };
     }, [isFullScreen])
+
+    const handleSettingsClick = () => {
+        setSettings((prev) => ({...prev, settingsModalIsOpen:true}))
+    }
     
     return <div className='flex items-center justify-between bg-dark-layer-2 h-11 w-full'>
         <div className='flex items-center'>
@@ -50,7 +57,9 @@ const PreferenceNav:React.FC<PreferenceNavProps> = () => {
         </div>
 
         <div className='flex items-center m-2'>
-            <button className='relative rounded px-3 py-1.5 font-medium items-center transition-all focus:outline-none inline-flex ml-auto p-1 mr-2 hover:bg-dark-fill-3 group'>
+            <button className='relative rounded px-3 py-1.5 font-medium items-center transition-all focus:outline-none inline-flex ml-auto p-1 mr-2 hover:bg-dark-fill-3 group'
+                onClick={handleSettingsClick}
+            >
                 <div className='text-dark-gray-6 h-4 w-4 text-lg'>
                     <AiOutlineSetting/>              
                 </div>
@@ -75,6 +84,7 @@ const PreferenceNav:React.FC<PreferenceNavProps> = () => {
                 </div>
             </button>
         </div>
+        {settings.settingsModalIsOpen && <SettingsModal settings={settings} setSettings={setSettings}/>}
     </div>
 }
 export default PreferenceNav;

@@ -15,6 +15,7 @@ import { toast } from 'react-toastify';
 import { problems } from '@/utils/problems';
 import { useRouter } from 'next/router';
 import { arrayUnion, doc, updateDoc } from 'firebase/firestore';
+import useLocalStorage from '@/hooks/useLocalStorage';
 
 type PlaygroundProps = {
     problem: LocalProblem,
@@ -22,10 +23,24 @@ type PlaygroundProps = {
     setSolved: React.Dispatch<React.SetStateAction<boolean>>
 };
 
+export interface ISettings {
+    fontSize: string;
+    settingsModalIsOpen: boolean;
+    dropDownIsOpen: boolean;
+}
+
 const Playground:React.FC<PlaygroundProps> = ({problem, setSuccess, setSolved}) => {
     const [currentTestCaseId, setcurrentTestCaseId] = useState(0);
     const currentTestCase = problem.examples[currentTestCaseId];
     let [userCode, setUserCode] = useState<string>(problem.starterCode);
+
+    const [fontSize, setFontSize] = useLocalStorage("font-size", "16px");
+    const [settings, setSettings] = useState<ISettings>({
+        fontSize: fontSize,
+        settingsModalIsOpen: false,
+        dropDownIsOpen: false
+    }) 
+
     const [user] = useAuthState(auth);
     const {query : {pid}} = useRouter();
 
@@ -102,7 +117,7 @@ const Playground:React.FC<PlaygroundProps> = ({problem, setSuccess, setSolved}) 
     }
     
     return <div className='flex flex-col bg-dark-layer-1 relative overflow-x-hidden'>
-        <PreferenceNav/>
+        <PreferenceNav settings={settings} setSettings={setSettings}/>
         <Split className='h-[calc(100vh-114px)]' direction="vertical"  minSize={60}>
             <div className='w-full overflow-auto'>
                 <CodeMirror
@@ -110,7 +125,7 @@ const Playground:React.FC<PlaygroundProps> = ({problem, setSuccess, setSolved}) 
                     theme={vscodeDark}
                     extensions={[javascript(),  EditorView.lineWrapping]}
                     onChange={onChange}
-                    style={{fontSize:16}}
+                    style={{fontSize:settings.fontSize}}
                 />
             </div>
             <div className='w-full px-5 overflow-auto pb-10'>
