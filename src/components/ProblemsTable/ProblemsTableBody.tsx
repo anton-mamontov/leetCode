@@ -8,9 +8,10 @@ import { DbProblem } from '@/utils/types/problem';
 
 type ProblemsTableBodyProps = {
     problems: DbProblem[];
+    solvedProblems : String[]
 };
 
-const ProblemsTableBody:React.FC<ProblemsTableBodyProps> = ({problems}) => {
+const ProblemsTableBody:React.FC<ProblemsTableBodyProps> = ({problems, solvedProblems}) => {
     const setYoutubeModalState = useSetRecoilState(youtubeModalState);
     const handleClick = (videoId: string) => {
         setYoutubeModalState((prev) => ({...prev, isOpen:true, videoId:videoId}))
@@ -26,7 +27,7 @@ const ProblemsTableBody:React.FC<ProblemsTableBodyProps> = ({problems}) => {
                     return(
                         <tr key={problem.id} className={`${idx % 2 == 1 ? 'bg-dark-layer-1' : ''}`}>
                             <th className='px-2 py-4 font-medium whitespace-nowrap text-dark-green-s'>
-                                <BsCheckCircle fontSize={"18"} width="18"/>
+                                {solvedProblems.includes(problem.id) && <BsCheckCircle fontSize={"18"} width="18"/>}
                             </th>
                             <td className='px-6 py-4'>
                                 {problem.link? (

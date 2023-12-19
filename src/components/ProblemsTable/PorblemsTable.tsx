@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import ProblemsTableBody from '@/components/ProblemsTable/ProblemsTableBody'
-import { collection, getDocs, orderBy, query } from 'firebase/firestore';
-import { firestore } from '@/firebase/firebase';
+import { collection, doc, getDoc, getDocs, orderBy, query } from 'firebase/firestore';
+import { auth, firestore } from '@/firebase/firebase';
 import { DbProblem } from '@/utils/types/problem';
+import { useAuthState } from 'react-firebase-hooks/auth';
 
 type PorblemsTableProps = {
     
@@ -10,15 +11,17 @@ type PorblemsTableProps = {
 
 const ProblemsTable:React.FC<PorblemsTableProps> = () => {
     const [loadingProblems, setLoadingProblems] = useState(true);
+    const [loadingProblemsStatuses, setloadingProblemsStatuses] = useState(true);
 
     const problems = useGetProblems(setLoadingProblems);
+    const solvedProblems = useGetSolvedProblems(setloadingProblemsStatuses);
     return <div className='relative overflow-x-auto mx-auto px-6 pb-10'>
-      {loadingProblems && (
+      {loadingProblems && loadingProblemsStatuses && (
         <div className='animate-pulse max-w-[1200px] mx-auto sm:w-7/12 w-full'>
           {[...Array(10)].map((_, idx) => <LoadingSkeleton key={idx}/>)}        
         </div>
       )}
-      {!loadingProblems && (
+      {!loadingProblems && !loadingProblemsStatuses && (
          <table className='text-sm text-left text-gray-500 dark:text-gray-400 sm:w-9/12 w-full max-w-[1200px] mx-auto'>
          <thead className='text-xs uppercase text-gray-400 border-b'>
            <tr>
@@ -39,7 +42,7 @@ const ProblemsTable:React.FC<PorblemsTableProps> = () => {
              </th>
            </tr>
          </thead>
-         <ProblemsTableBody problems={problems}/>
+         <ProblemsTableBody problems={problems} solvedProblems={solvedProblems}/>
        </table>
       )}
    
@@ -74,10 +77,35 @@ function useGetProblems(setLoadingProblems: React.Dispatch<React.SetStateAction<
             })
             setProblems(tmp);
             setLoadingProblems(false);
-            
         }
 
         getProblems()
     }, [setLoadingProblems])
     return problems;
+}
+
+function useGetSolvedProblems(setloadingProblemsStatuses: React.Dispatch<React.SetStateAction<boolean>>) {
+  const [solvedProblems, setSolvedProblems] = useState<String[]>([]);
+  const [user] = useAuthState(auth);
+
+  useEffect(() => {
+    const getSolvedProblems = async () => {
+      setloadingProblemsStatuses(true);
+      const userRef = doc(firestore, "users", user!.uid);
+      const userDoc = await getDoc(userRef);
+
+      if (userDoc.exists()) {
+        setSolvedProblems(userDoc.data().solvedProblems);
+      }
+      setloadingProblemsStatuses(false)
+    }
+    
+    if (user) getSolvedProblems();
+    if (!user) {
+      setSolvedProblems([])
+      setloadingProblemsStatuses(false);
+    };
+  }, [user, setloadingProblemsStatuses])
+
+  return solvedProblems;
 }
