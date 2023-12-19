@@ -6,10 +6,13 @@ import Loggout from "../Buttons/Loggout";
 import { useSetRecoilState } from "recoil";
 import { authModalState } from "@/atoms/authModalAtom";
 import Image from "next/image";
-import ProblemPage from "@/pages/problems/[pid]";
 import {FaChevronLeft, FaChevronRight} from 'react-icons/fa'
 import { BsList } from "react-icons/bs";
 import Timer from "../Timer/Timer";
+import { useRouter } from "next/router";
+import { problems } from "@/utils/problems";
+import { LocalProblem } from "@/utils/types/problem";
+
 
 type TopbarProps = {
   problemPage? : boolean;
@@ -23,6 +26,25 @@ const Topbar: React.FC<TopbarProps> = ({problemPage}) => {
     setAuthModalState((prev) => ({...prev, isOpen:true, type:'login'}))
   );
 
+  const router = useRouter();
+  const handleProblemChange = (isForward:boolean) => {
+    const {order} = problems[router.query.pid as string] as LocalProblem;
+    const direction = isForward ? 1 : -1;
+    const nextProblemOrder = order + direction;
+    const nextProblemKey = Object.keys(problems).find(key => problems[key].order === nextProblemOrder);
+
+
+    if (isForward && !nextProblemKey) {
+      const firstProblemKey = Object.keys(problems).find(key => problems[key].order === 1);
+      router.push(`/problems/${firstProblemKey}`)
+    } else if (!isForward && !nextProblemKey) {
+      const lastProblemKey = Object.keys(problems).find(key => problems[key].order === Object.keys(problems).length);
+      router.push(`/problems/${lastProblemKey}`)
+    } else {
+      router.push(`/problems/${nextProblemKey}`)
+    }
+  };
+
   return <nav className="relative flex h-[70px] w-full shrink-0 items-center px-5 bg-dark-layer-1 text-dark-gray-7">
     <div className="flex w-full items-center justify-between max-w-[1200px] mx-auto">
       <div className="h-[50px] ">
@@ -32,7 +54,9 @@ const Topbar: React.FC<TopbarProps> = ({problemPage}) => {
       </div>
       {problemPage && (
           <div className="flex items-center gap-4 flex-1 justify-center ml-80">
-            <div className="flex items-center justify-center rounded bg-dark-fill-3 hover:bg-dark-fill-2 h-8 w-8 cursor-pointer">
+            <div className="flex items-center justify-center rounded bg-dark-fill-3 hover:bg-dark-fill-2 h-8 w-8 cursor-pointer"
+              onClick={() => handleProblemChange(false)}
+            >
               <FaChevronLeft/>
             </div>
             <Link href="/" className="flex items-center gap-2 font-medium max-w-[170px] text-dark-gray-8 cursor-pointer">
@@ -41,7 +65,9 @@ const Topbar: React.FC<TopbarProps> = ({problemPage}) => {
               </div>
               <p>Problems list</p>
             </Link>
-            <div className="flex items-center justify-center rounded bg-dark-fill-3 hover:bg-dark-fill-2 h-8 w-8 cursor-pointer">
+            <div className="flex items-center justify-center rounded bg-dark-fill-3 hover:bg-dark-fill-2 h-8 w-8 cursor-pointer"
+              onClick={() => handleProblemChange(true)}
+            >
               <FaChevronRight/>
             </div>
         </div>
