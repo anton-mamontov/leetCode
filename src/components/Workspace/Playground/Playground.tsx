@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import PreferenceNav from './PreferenceNavBar/PreferenceNav';
 import Split from 'react-split';
@@ -82,10 +82,18 @@ const Playground:React.FC<PlaygroundProps> = ({problem, setSuccess, setSolved}) 
         }
     }
 
-
+    useEffect(() => {
+        const code = localStorage.getItem(`code-${pid}`);
+        if (user) {
+            setUserCode(code ? JSON.parse(code) : problem.starterCode);
+        } else {
+            setUserCode(problem.starterCode);
+        }
+    }, [pid, user, problem.starterCode])
 
     const onChange = (value:string) => {
         setUserCode(value);
+        localStorage.setItem(`code-${pid}`, JSON.stringify(value));
     }
     
     return <div className='flex flex-col bg-dark-layer-1 relative overflow-x-hidden'>
@@ -93,7 +101,7 @@ const Playground:React.FC<PlaygroundProps> = ({problem, setSuccess, setSolved}) 
         <Split className='h-[calc(100vh-114px)]' direction="vertical"  minSize={60}>
             <div className='w-full overflow-auto'>
                 <CodeMirror
-                    value={problem.starterCode}
+                    value={userCode}
                     theme={vscodeDark}
                     extensions={[javascript(),  EditorView.lineWrapping]}
                     onChange={onChange}
