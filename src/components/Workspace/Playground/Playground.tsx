@@ -25,7 +25,7 @@ type PlaygroundProps = {
 const Playground:React.FC<PlaygroundProps> = ({problem, setSuccess, setSolved}) => {
     const [currentTestCaseId, setcurrentTestCaseId] = useState(0);
     const currentTestCase = problem.examples[currentTestCaseId];
-    const [userCode, setUserCode] = useState<string>(problem.starterCode);
+    let [userCode, setUserCode] = useState<string>(problem.starterCode);
     const [user] = useAuthState(auth);
     const {query : {pid}} = useRouter();
 
@@ -39,6 +39,7 @@ const Playground:React.FC<PlaygroundProps> = ({problem, setSuccess, setSolved}) 
             return;
         }
         try {
+            userCode = userCode.slice(userCode.indexOf(problem.starterFunctionName));
             const cb = new Function(`return ${userCode}`)();
             const success = problems[pid as string].handlerFunction(cb);
             if (success) {
