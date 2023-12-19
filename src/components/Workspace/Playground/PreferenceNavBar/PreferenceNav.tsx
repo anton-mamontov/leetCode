@@ -1,11 +1,46 @@
-import React from 'react';
-import { AiOutlineFullscreen, AiOutlineSetting } from 'react-icons/ai';
+import React, { useEffect, useState } from 'react';
+import { AiOutlineFullscreen, AiOutlineFullscreenExit, AiOutlineSetting } from 'react-icons/ai';
 
 type PreferenceNavProps = {
     
 };
 
 const PreferenceNav:React.FC<PreferenceNavProps> = () => {
+    const [isFullScreen, setFullScreen] = useState<boolean>(false);
+    const handleFullScreen = () => {
+        if (isFullScreen) {
+            document.exitFullscreen();
+        } else{
+            document.documentElement.requestFullscreen();
+        }
+        setFullScreen(prev => !prev);
+    };
+
+    useEffect(() => {
+        function exitHandler(e: any) {
+            if (!document.fullscreenElement) {
+                setFullScreen(false);
+                return;
+            }
+            setFullScreen(true);
+        }
+
+        if (document.addEventListener) {
+            document.addEventListener("fullscreenchange", exitHandler);
+            document.addEventListener("webkitfullscreenchange", exitHandler);
+            document.addEventListener("mozfullscreenchange", exitHandler);
+            document.addEventListener("MSFullscreenChange", exitHandler);
+        }
+
+        return () => {
+            if (document.removeEventListener) {
+              document.removeEventListener("fullscreenchange", exitHandler);
+              document.removeEventListener("webkitfullscreenchange", exitHandler);
+              document.removeEventListener("mozfullscreenchange", exitHandler);
+              document.removeEventListener("MSFullscreenChange", exitHandler);
+            }
+          };
+    }, [isFullScreen])
     
     return <div className='flex items-center justify-between bg-dark-layer-2 h-11 w-full'>
         <div className='flex items-center'>
@@ -26,14 +61,17 @@ const PreferenceNav:React.FC<PreferenceNavProps> = () => {
                 </div>
             </button>
 
-            <button className='relative rounded px-3 py-1.5 font-medium items-center transition-all focus:outline-none inline-flex ml-auto p-1 mr-2 hover:bg-dark-fill-3 group'>
+            <button className='relative rounded px-3 py-1.5 font-medium items-center transition-all focus:outline-none inline-flex ml-auto p-1 mr-2 hover:bg-dark-fill-3 group'
+                onClick={handleFullScreen}
+            >
                 <div className='text-dark-gray-6 h-4 w-4 text-lg'>
-                    <AiOutlineFullscreen/>              
+                   {isFullScreen ? <AiOutlineFullscreenExit/> : <AiOutlineFullscreen/>}
                 </div>
                 <div className='absolute w-auto p-2 text-sm m-2 min-w-max translate-x-3 right-0 top-5 z-10 rounded-md shadow-md text-dark-layer-2 bg-gray-200 origin-center scale-0
                     transition-all duration-100 ease-linear group-hover:scale-100
                 '>
-                    Full screen
+                    {isFullScreen ? `Exit full screen` :`Full screen`}
+                    
                 </div>
             </button>
         </div>
