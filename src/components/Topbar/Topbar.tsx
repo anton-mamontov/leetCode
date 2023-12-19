@@ -54,7 +54,7 @@ const Topbar: React.FC<TopbarProps> = ({problemPage}) => {
             rel='noreferrer'
             className="bg-dark-fill-3 pt-[5px] pb-[6px] px-3 cursor-pointer rounded text-brand-orange hover:bg-dark-fill-2"
           >
-            Premium
+            Buy me a coffe
           </a>
         </div>
         {problemPage && user && <Timer/>}
