@@ -49,7 +49,7 @@ const Topbar: React.FC<TopbarProps> = ({problemPage}) => {
     <div className="flex w-full items-center justify-between max-w-[1200px] mx-auto">
       <div className="h-[50px] ">
         <Link href='/' >
-          <Image src="/mammoth1.jpg" alt="Logo Image" width={500} height={500} style={{ height: '100%', width: 'auto' }} quality={100} priority={true}/>
+          <Image src="/code/mammoth1.jpg" alt="Logo Image" width={500} height={500} style={{ height: '100%', width: 'auto' }} quality={100} priority={true}/>
         </Link>
       </div>
       {problemPage && (
@@ -92,7 +92,7 @@ const Topbar: React.FC<TopbarProps> = ({problemPage}) => {
         {user && (
           <div className="flex flex-row gap-3">
             <div className="cursor-pointer group relative">
-              <img src="/avatar.png" alt="user profile image" className="h-8 w-8 rounded-full"/>  
+              <img src="/code/avatar.png" alt="user profile image" className="h-8 w-8 rounded-full"/>  
               <div className="absolute top-10 left-1/4 -translate-x-2/4 mx-auto bg-dark-layer-1 text-brand-orange p-2 shadow-lg
                 z-40 group-hover:scale-100 scale-0
                 transition-all duration-300 ease-out

@@ -19,7 +19,7 @@ export default function Home() {
    <Head>
       <title>Mamont Lab</title>
       <meta name='viewport' content='width=device-width, initial-scale=1'/>
-      <link rel='icon' href='/mammoth1.jpg' />
+      <link rel='icon' href='/code/mammoth1.jpg' />
       <meta name='decription' content='Web application that contains leetcode problems and video solutions'/>
     </Head>
     <main className='bg-dark-layer-2 min-h-screen'>

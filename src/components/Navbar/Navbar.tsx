@@ -15,7 +15,7 @@ const Navbar:React.FC<NavbarProps> = () => {
     
     return <div className='h-[70px] flex items-center justify-between sm:px-12 px-2 md:px-24'>
             <Link href="/" className='flex-item-center justify-normal'>
-                <img src='/mammoth1.jpg' alt='Mamont Lab' width='h-[50x]' className='flex items-center h-[50px]'/>
+                <img src='/code/mammoth1.jpg' alt='Mamont Lab' width='h-[50x]' className='flex items-center h-[50px]'/>
             </Link>
             <div className="flex items-center">
                 <button

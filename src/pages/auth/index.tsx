@@ -29,7 +29,7 @@ const Auth:React.FC<AuthProps> = () => {
         <div className='max-w-7xl mx-auto'></div>
             <Navbar/>
             <div className='flex items-center justify-center h-[calc(100vh-5rem)] pointer-events-none select-none'>
-                    <Image src='/hero.png' alt="Hero img" width={639} height={391} priority={true}/>
+                    <Image src='/code/hero.png' alt="Hero img" width={639} height={391} priority={true}/>
             </div>
             {authModal.isOpen && <AuthModals/>}
     </div>
